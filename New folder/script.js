@@ -11,53 +11,82 @@ reset.style.display = "none";
 let bulbCount = 0;
 
 startButton.addEventListener("click", () => {
-	container.style.display = "flex";
-	startButton.style.display = "none";
+  container.style.display = "flex";
+  startButton.style.display = "none";
 });
 
 submit.addEventListener("click", () => {
-	reset.style.display = "block";
-	bulbCount = input.value;
-	container.style.display = "none";
-	bulbContainer.style.display = "flex";
-	bulbContainer.innerHTML = null;
+  reset.style.display = "block";
+  bulbCount = parseInt(input.value); // Ensure bulbCount is a number
+  container.style.display = "none";
+  bulbContainer.style.display = "flex";
+  bulbContainer.innerHTML = ""; // Clear previous bulbs
 
-	for (let i = 0; i < bulbCount; i++) {
-		const bulbSwitchContainer = document.createElement("div");
-		bulbSwitchContainer.classList.add("bulb-switch-combo");
+  for (let i = 0; i < bulbCount; i++) {
+    const bulbSwitchContainer = document.createElement("div");
+    bulbSwitchContainer.classList.add("bulb-switch-combo");
 
-		const bulb = document.createElement("img");
-		const switchButton = document.createElement("button");
-		switchButton.innerText = "OFF";
-		switchButton.style.background = "red";
+    const bulb = document.createElement("img");
+    const switchButton = document.createElement("button");
+    const timer = document.createElement("div");
 
-		bulb.id = `bulb${i}`;
-		bulb.src = "bulb.jpg";
-		bulb.style.filter = "grayscale(100%)";
-		bulb.width = 100;
-		bulb.height = 150;
-		bulbSwitchContainer.appendChild(bulb);
-		bulbSwitchContainer.appendChild(switchButton);
+    switchButton.innerText = "OFF";
+    switchButton.style.background = "red";
 
-		switchButton.addEventListener("click", () => {
-			if (bulb.style.filter === "grayscale(100%)") {
-				bulb.style.filter = "grayscale(0%)";
-				switchButton.innerText = "ON";
-				switchButton.style.background = "limegreen";
-			} else {
-				bulb.style.filter = "grayscale(100%)";
-				switchButton.innerText = "OFF";
-				switchButton.style.background = "red";
-			}
-		});
+    bulb.id = `bulb${i}`;
+    bulb.src = "bulb.jpg";
+    bulb.style.filter = "grayscale(100%)";
+    bulb.width = 100;
+    bulb.height = 150;
 
-		bulbContainer.appendChild(bulbSwitchContainer);
+    timer.id = `timer${i}`;
+    timer.style.textAlign = "center";
+    timer.style.marginTop = "10px";
+    timer.innerText = "10 seconds";
 
-		reset.addEventListener("click", () => {
-			input.value = "";
-			bulbContainer.style.display = "none";
-			startButton.style.display = "block";
-			reset.style.display = "none";
-		});
-	}
+    bulbSwitchContainer.appendChild(bulb);
+    bulbSwitchContainer.appendChild(switchButton);
+    bulbSwitchContainer.appendChild(timer);
+
+    let intervalId = null;
+    let timeLeft = 10;
+
+    switchButton.addEventListener("click", () => {
+      if (bulb.style.filter === "grayscale(100%)") {
+        bulb.style.filter = "grayscale(0%)";
+        switchButton.innerText = "ON";
+        switchButton.style.background = "limegreen";
+        timeLeft = 10; // Reset timer
+        timer.innerText = `${timeLeft} seconds`;
+
+        if (intervalId) clearInterval(intervalId); // Clear any previous interval
+        intervalId = setInterval(() => {
+          timeLeft--;
+          if (timeLeft <= 0) {
+            clearInterval(intervalId);
+            bulb.style.filter = "grayscale(100%)";
+            switchButton.innerText = "OFF";
+            switchButton.style.background = "red";
+          }
+          timer.innerText = `${timeLeft} seconds`;
+        }, 1000);
+      } else {
+        bulb.style.filter = "grayscale(100%)";
+        switchButton.innerText = "OFF";
+        switchButton.style.background = "red";
+        clearInterval(intervalId);
+        timer.innerText = "10 seconds";
+      }
+    });
+
+    bulbContainer.appendChild(bulbSwitchContainer);
+  }
+});
+
+reset.addEventListener("click", () => {
+  input.value = "";
+  bulbContainer.style.display = "none";
+  startButton.style.display = "block";
+  reset.style.display = "none";
+  bulbContainer.innerHTML = ""; // Clear all bulbs and timers
 });
