@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>Increment Decrement Onclick</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2c3e50;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .counter {
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+        }
+        .counter div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            width: 100px;
+        }
+        .counter div span {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .text div {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .text .highlight {
+            color: #00bcd4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="counter">
+            <div>
+                <button onclick="decrement('count1')">-</button>
+                <span id="count1">01</span>
+                <button onclick="increment('count1')">+</button>
+            </div>
+            <div>
+                <button onclick="decrement('count2')">-</button>
+                <span id="count2">02</span>
+                <button onclick="increment('count2')">+</button>
+            </div>
+        </div>
+        <div class="text">
+            <div class="highlight">Increment</div>
+            <div>Decrement</div>
+            <div>Onclick</div>
+        </div>
+    </div>
+
+    <script>
+        function increment(id) {
+            let count = document.getElementById(id);
+            let number = parseInt(count.innerText);
+            number++;
+            count.innerText = number < 10 ? '0' + number : number;
+        }
+
+        function decrement(id) {
+            let count = document.getElementById(id);
+            let number = parseInt(count.innerText);
+            if (number > 0) {
+                number--;
+                count.innerText = number < 10 ? '0' + number : number;
+            }
+        }
+    </script>
+</body>
+</html>
